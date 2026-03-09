@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from models import db, Student
+from models import db, Student , Company
 
 app = Flask(__name__)
 
@@ -34,6 +34,29 @@ def student_register():
         return "Student Registered Successfully"
 
     return render_template("student_register.html")
+
+
+@app.route("/company_register", methods=["GET","POST"])
+def company_register():
+
+    if request.method == "POST":
+
+        company_name = request.form["company_name"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        new_company = Company(
+            company_name=company_name,
+            email=email,
+            password=password
+        )
+
+        db.session.add(new_company)
+        db.session.commit()
+
+        return "Company Registered"
+
+    return render_template("company_register.html")
 
 
 if __name__ == "__main__":
