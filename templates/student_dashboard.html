@@ -18,4 +18,15 @@
     </p>
 
     {% endfor %}
+
+    <h3>My Applications</h3>
+
+    {% for app in applications %}
+
+    <p>
+    Drive ID: {{ app.drive_id }} <br>
+    Status: {{ app.status }}
+    </p>
+
+    {% endfor %}
 </html>

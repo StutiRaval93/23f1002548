@@ -164,10 +164,13 @@ def student_dashboard(student_id):
 
     drives = Drive.query.filter_by(status="Approved").all()
 
+    applications = Application.query.filter_by(student_id=student_id).all()
+
     return render_template(
         "student_dashboard.html",
         student=student,
-        drives=drives
+        drives=drives,
+        applications=applications
     )
 
 @app.route('/apply/<int:student_id>/<int:drive_id>', methods=['POST'])
