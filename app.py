@@ -95,7 +95,11 @@ def company_login():
         if company:
 
             if company.approved:
-                return render_template("company_dashboard.html", company=company)
+
+                drives = Drive.query.filter_by(company_id=company.id).all()
+
+                return redirect(f"/company_dashboard/{company.id}")
+              
 
             else:
                 return "Waiting for admin approval"
@@ -110,7 +114,7 @@ def create_drive():
 
     if request.method == 'POST':
 
-        company_id = request.form['company_id']
+        company_id = int(request.form['company_id'])
         job_title = request.form['job_title']
         description = request.form['description']
 
@@ -124,7 +128,7 @@ def create_drive():
         db.session.add(drive)
         db.session.commit()
 
-        return "Placement Drive Created. Waiting for Admin Approval."
+        return redirect('/company_login')
 
     return render_template("create_drive.html")
 
@@ -194,6 +198,32 @@ def apply(student_id, drive_id):
     db.session.commit()
 
     return "Wohoo! Application Submitted Successfully"
+
+@app.route('/view_applications/<int:drive_id>')
+def view_applications(drive_id):
+
+    applications = Application.query.filter_by(drive_id=drive_id).all()
+
+    return render_template(
+        "view_applications.html",
+        applications=applications
+    )
+
+@app.route('/company_dashboard/<int:company_id>')
+def company_dashboard(company_id):
+
+    company = Company.query.get(company_id)
+
+    drives = Drive.query.filter_by(company_id=company_id).all()
+
+    print("Company ID:", company_id)
+    print("Drives:", drives)
+    
+    return render_template(
+        "company_dashboard.html",
+        company=company,
+        drives=drives
+    )
 
 if __name__ == "__main__":
     with app.app_context():

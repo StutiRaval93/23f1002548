@@ -4,4 +4,33 @@
     <p>Welcome {{ company.company_name }}</p>
 
     <a href="/create_drive">Create Placement Drive</a>
+
+    <h3>Your Placement Drives</h3>
+
+    <table border="1">
+
+        <tr>
+        <th>Job Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Applications</th>
+        </tr>
+
+        {% for drive in drives %}
+
+        <tr>
+
+        <td>{{ drive.job_title }}</td>
+        <td>{{ drive.description }}</td>
+        <td>{{ drive.status }}</td>
+
+        <td>
+        <a href="/view_applications/{{drive.id}}">View Applications</a>
+        </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
 </html>
