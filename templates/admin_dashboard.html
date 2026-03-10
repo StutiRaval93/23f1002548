@@ -1,28 +1,78 @@
-<h2>Admin Dashboard</h2>
-<!-- Admin Dashboard Management Milestone Completed -->
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
 
-<h3>Companies waiting approval</h3>
-{% for company in companies %}
-<p>
-{{ company.company_name }} - {{ company.email }}
-<form method="POST" action="/approve_company/{{ company.id }}">
-<button type="submit">Approve</button>
-</form>
-</p>
-{% endfor %}
+    <body>
 
-<h3>Placement Drives Waiting Approval</h3>
+        <div class="container mt-5">
 
-{% for drive in drives %}
+        <h2 class="text-center mb-4">Placement Portal</h2>
 
-<p>
-Job Title: {{ drive.job_title }} <br>
-Description: {{ drive.description }}
+        <h2 class="mb-4">Admin Dashboard</h2>
 
-<form method="POST" action="/approve_drive/{{drive.id}}">
-<button type="submit">Approve Drive</button>
-</form>
+        <!-- Admin Dashboard Management Milestone Completed -->
 
-</p>
+        <h3>Companies Waiting Approval</h3>
 
-{% endfor %}
+        <table class="table table-bordered table-striped">
+
+        <tr>
+        <th>Company Name</th>
+        <th>Email</th>
+        <th>Action</th>
+        </tr>
+
+        {% for company in companies %}
+
+        <tr>
+
+        <td>{{ company.company_name }}</td>
+        <td>{{ company.email }}</td>
+
+        <td>
+        <form method="POST" action="/approve_company/{{ company.id }}">
+        <button class="btn btn-success btn-sm">Approve</button>
+        </form>
+        </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </table>
+
+
+        <h3 class="mt-5">Placement Drives Waiting Approval</h3>
+
+        <table class="table table-bordered table-striped">
+
+        <tr>
+        <th>Job Title</th>
+        <th>Description</th>
+        <th>Action</th>
+        </tr>
+
+        {% for drive in drives %}
+
+        <tr>
+
+        <td>{{ drive.job_title }}</td>
+        <td>{{ drive.description }}</td>
+
+        <td>
+        <form method="POST" action="/approve_drive/{{drive.id}}">
+        <button class="btn btn-primary btn-sm">Approve Drive</button>
+        </form>
+        </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </table>
+
+        </div>
+
+    </body>
+</html>

@@ -114,12 +114,12 @@ def create_drive():
 
     if request.method == 'POST':
 
-        company_id = int(request.form['company_id'])
+        # company_id = int(request.form['company_id'])
         job_title = request.form['job_title']
         description = request.form['description']
 
         drive = Drive(
-            company_id=company_id,
+            # company_id=company_id,
             job_title=job_title,
             description=description,
             status="Pending"
@@ -204,6 +204,7 @@ def view_applications(drive_id):
 
     applications = Application.query.filter_by(drive_id=drive_id).all()
 
+    
     return render_template(
         "view_applications.html",
         applications=applications
@@ -214,7 +215,7 @@ def company_dashboard(company_id):
 
     company = Company.query.get(company_id)
 
-    drives = Drive.query.filter_by(company_id=company_id).all()
+    drives = Drive.query.filter_by(company_id=1).all()
 
     print("Company ID:", company_id)
     print("Drives:", drives)

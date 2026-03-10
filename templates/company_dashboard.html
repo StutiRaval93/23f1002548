@@ -1,37 +1,51 @@
 <html>
-    <!-- company dashboard Milestone Completed -->
-    <h2>Company Dashboard</h2>
+<head>
+<title>Company Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-    <p>Welcome {{ company.company_name }}</p>
+<body>
 
-    <a href="/create_drive">Create Placement Drive</a>
+<div class="container mt-5">
 
-    <h3>Your Placement Drives</h3>
+<h2 class="text-center mb-4">Company Dashboard</h2>
 
-    <table border="1">
+<p><strong>Welcome {{ company.company_name }}</strong></p>
 
-        <tr>
-        <th>Job Title</th>
-        <th>Description</th>
-        <th>Status</th>
-        <th>Applications</th>
-        </tr>
+<a class="btn btn-primary mb-3" href="/create_drive">Create Placement Drive</a>
 
-        {% for drive in drives %}
+<h3>Your Placement Drives</h3>
 
-        <tr>
+<table class="table table-bordered table-striped">
 
-        <td>{{ drive.job_title }}</td>
-        <td>{{ drive.description }}</td>
-        <td>{{ drive.status }}</td>
+<tr>
+<th>Job Title</th>
+<th>Description</th>
+<th>Status</th>
+<th>Applications</th>
+</tr>
 
-        <td>
-        <a href="/view_applications/{{drive.id}}">View Applications</a>
-        </td>
+{% for drive in drives %}
 
-        </tr>
+<tr>
 
-        {% endfor %}
+<td>{{ drive.job_title }}</td>
+<td>{{ drive.description }}</td>
+<td>{{ drive.status }}</td>
 
-    </table>
+<td>
+<a class="btn btn-secondary btn-sm" href="/view_applications/{{drive.id}}">
+View Applications
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
 </html>
