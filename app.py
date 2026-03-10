@@ -218,7 +218,7 @@ def company_dashboard(company_id):
 
     print("Company ID:", company_id)
     print("Drives:", drives)
-    
+
     return render_template(
         "company_dashboard.html",
         company=company,
@@ -230,3 +230,5 @@ if __name__ == "__main__":
         db.create_all()
 
     app.run(debug=True)
+
+# Milestone Placement Tracking completed
