@@ -150,13 +150,47 @@ def student_login():
         student = Student.query.filter_by(email=email, password=password).first()
 
         if student:
-            return render_template("student_dashboard.html", student=student)
+            return redirect(f"/student_dashboard/{student.id}")
 
         else:
             return "Invalid credentials"
 
     return render_template("student_login.html")
 
+@app.route('/student_dashboard/<int:student_id>')
+def student_dashboard(student_id):
+
+    student = Student.query.get(student_id)
+
+    drives = Drive.query.filter_by(status="Approved").all()
+
+    return render_template(
+        "student_dashboard.html",
+        student=student,
+        drives=drives
+    )
+
+@app.route('/apply/<int:student_id>/<int:drive_id>', methods=['POST'])
+def apply(student_id, drive_id):
+
+    existing = Application.query.filter_by(
+        student_id=student_id,
+        drive_id=drive_id
+    ).first()
+
+    if existing:
+        return "Oops! You already applied for this drive"
+
+    application = Application(
+        student_id=student_id,
+        drive_id=drive_id,
+        status="Applied"
+    )
+
+    db.session.add(application)
+    db.session.commit()
+
+    return "Wohoo! Application Submitted Successfully"
 
 if __name__ == "__main__":
     with app.app_context():
