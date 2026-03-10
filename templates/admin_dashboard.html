@@ -1,0 +1,27 @@
+<h2>Admin Dashboard</h2>
+
+<h3>Companies waiting approval</h3>
+{% for company in companies %}
+<p>
+{{ company.company_name }} - {{ company.email }}
+<form method="POST" action="/approve_company/{{ company.id }}">
+<button type="submit">Approve</button>
+</form>
+</p>
+{% endfor %}
+
+<h3>Placement Drives Waiting Approval</h3>
+
+{% for drive in drives %}
+
+<p>
+Job Title: {{ drive.job_title }} <br>
+Description: {{ drive.description }}
+
+<form method="POST" action="/approve_drive/{{drive.id}}">
+<button type="submit">Approve Drive</button>
+</form>
+
+</p>
+
+{% endfor %}

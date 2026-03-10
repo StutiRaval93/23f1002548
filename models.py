@@ -33,3 +33,10 @@ class Application(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     drive_id = db.Column(db.Integer, db.ForeignKey('placement_drive.id'))
     status = db.Column(db.String(100), default="Applied")
+
+class Drive(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer)
+    job_title = db.Column(db.String(100))
+    description = db.Column(db.String(500))
+    status = db.Column(db.String(50))

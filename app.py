@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request
-from models import db, Student , Company
+from flask import Flask, render_template, request, redirect
+from models import db, Student , Company, Admin, Drive, Application
 
 app = Flask(__name__)
 
@@ -57,6 +57,105 @@ def company_register():
         return "Company Registered"
 
     return render_template("company_register.html")
+
+@app.route("/admin_login", methods=["GET","POST"])
+def admin_login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        # hard-coded admin
+        if username == "admin" and password == "admin123":
+            # List all unapproved companies
+            companies = Company.query.filter_by(approved=False).all()
+            drives = Drive.query.filter_by(status="Pending").all()
+
+            return render_template("admin_dashboard.html", companies=companies, drives=drives)
+        else:
+            return "Invalid Credentials"
+    return render_template("admin_login.html")
+
+@app.route("/approve_company/<int:company_id>", methods=["POST"])
+def approve_company(company_id):
+    company = Company.query.get(company_id)
+    company.approved = True
+    db.session.commit()
+    return "Company Approved Successfully"
+
+@app.route('/company_login', methods=['GET','POST'])
+def company_login():
+
+    if request.method == 'POST':
+
+        email = request.form['email']
+        password = request.form['password']
+
+        company = Company.query.filter_by(email=email, password=password).first()
+
+        if company:
+
+            if company.approved:
+                return render_template("company_dashboard.html", company=company)
+
+            else:
+                return "Waiting for admin approval"
+
+        else:
+            return "Invalid credentials"
+
+    return render_template("company_login.html")
+
+@app.route('/create_drive', methods=['GET','POST'])
+def create_drive():
+
+    if request.method == 'POST':
+
+        company_id = request.form['company_id']
+        job_title = request.form['job_title']
+        description = request.form['description']
+
+        drive = Drive(
+            company_id=company_id,
+            job_title=job_title,
+            description=description,
+            status="Pending"
+        )
+
+        db.session.add(drive)
+        db.session.commit()
+
+        return "Placement Drive Created. Waiting for Admin Approval."
+
+    return render_template("create_drive.html")
+
+@app.route('/approve_drive/<int:id>', methods=['POST'])
+def approve_drive(id):
+
+    drive = Drive.query.get(id)
+
+    drive.status = "Approved"
+
+    db.session.commit()
+
+    return redirect('/admin_login')
+
+@app.route('/student_login', methods=['GET','POST'])
+def student_login():
+
+    if request.method == 'POST':
+
+        email = request.form['email']
+        password = request.form['password']
+
+        student = Student.query.filter_by(email=email, password=password).first()
+
+        if student:
+            return render_template("student_dashboard.html", student=student)
+
+        else:
+            return "Invalid credentials"
+
+    return render_template("student_login.html")
 
 
 if __name__ == "__main__":
