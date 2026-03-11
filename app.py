@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from models import db, Student , Company, Admin, Drive, Application
 
 app = Flask(__name__)
+app.secret_key = "placementportal123"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///placement.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -20,6 +21,10 @@ def student_register():
         email = request.form["email"]
         password = request.form["password"]
         course = request.form["course"]
+
+        qualification=request.form["qualification"]
+        experience=request.form["experience"]
+        skills=request.form["skills"]
 
         new_student = Student(
             name=name,
@@ -96,10 +101,13 @@ def company_login():
 
             if company.approved:
 
-                drives = Drive.query.filter_by(company_id=company.id).all()
+                # drives = Drive.query.filter_by(company_id=company.id).all()
 
-                return redirect(f"/company_dashboard/{company.id}")
-              
+                # return redirect(f"/company_dashboard/{company.id}")
+                session["company_id"] = company.id
+
+                return redirect("/company_dashboard")
+
 
             else:
                 return "Waiting for admin approval"
@@ -118,11 +126,14 @@ def create_drive():
         job_title = request.form['job_title']
         description = request.form['description']
 
+        company_id = session["company_id"]
+
         drive = Drive(
             # company_id=company_id,
             job_title=job_title,
             description=description,
-            status="Pending"
+            status="Pending",
+            company_id=company_id
         )
 
         db.session.add(drive)
@@ -210,12 +221,14 @@ def view_applications(drive_id):
         applications=applications
     )
 
-@app.route('/company_dashboard/<int:company_id>')
-def company_dashboard(company_id):
+@app.route('/company_dashboard')
+def company_dashboard():
+
+    company_id = session["company_id"]
 
     company = Company.query.get(company_id)
 
-    drives = Drive.query.filter_by(company_id=1).all()
+    drives = Drive.query.filter_by(company_id=company_id).all()
 
     print("Company ID:", company_id)
     print("Drives:", drives)

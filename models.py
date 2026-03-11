@@ -20,6 +20,9 @@ class Student(db.Model):
     email = db.Column(db.String(200))
     password = db.Column(db.String(200))
     course = db.Column(db.String(100))
+    qualification= db.Column(db.String(200))
+    experience= db.Column(db.String(200))
+    skills= db.Column(db.String(200))
 
 class PlacementDrive(db.Model):
     id = db.Column(db.Integer, primary_key=True)
